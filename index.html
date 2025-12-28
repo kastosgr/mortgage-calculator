@@ -1,228 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>All‑In Mortgage Calculator</title>
 
-<!-- ✅ PWA MANIFEST + THEME COLOR -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0066cc">
+<meta name="theme-color" content="#0d6efd">
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  background: #f4f6f8;
-  margin: 0;
-  padding: 12px;
-}
-
-.container {
-  max-width: 720px;
-  margin: auto;
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
-}
-
-h1 {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 16px;
-}
-
-label {
-  font-weight: 600;
-  margin-top: 14px;
-  display: block;
-  font-size: 15px;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  font-size: 16px; /* prevents iOS zoom */
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-select {
-  background: #fff;
-}
-
-button {
-  margin-top: 24px;
-  padding: 14px;
-  width: 100%;
-  background: #0066cc;
-  color: white;
-  border: none;
-  font-size: 18px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-button:active {
-  background: #004f9e;
-}
-
-.results {
-  margin-top: 20px;
-  background: #eef2f6;
-  padding: 14px;
-  border-radius: 10px;
-  font-size: 15px;
-}
-
-.result {
-  margin: 8px 0;
-}
-
-hr {
-  margin: 16px 0;
-  border: none;
-  border-top: 1px solid #ccc;
-}
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    max-width: 480px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+  }
+  input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  button {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  button:hover {
+    background: #0b5ed7;
+  }
+  .result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f1f4f9;
+    border-radius: 10px;
+    font-size: 16px;
+  }
 </style>
 </head>
 
 <body>
-
 <div class="container">
-<h1>All‑In Mortgage Calculator</h1>
+  <h1>All‑In Mortgage Calculator</h1>
 
-<label>Loan Amount ($)</label>
-<input type="text" id="loan" value="$300,000" inputmode="decimal" oninput="formatCurrency(this)">
+  <label>Loan Amount ($)</label>
+  <input id="loanAmount" type="number" value="300000">
 
-<label>Interest Rate (%)</label>
-<input type="number" step="0.01" id="rate" value="6.5" inputmode="decimal">
+  <label>Interest Rate (%)</label>
+  <input id="interestRate" type="number" step="0.01" value="6.5">
 
-<label>Loan Term (Years)</label>
-<input type="number" id="years" value="30" inputmode="numeric">
+  <label>Loan Term (Years)</label>
+  <input id="loanTerm" type="number" value="30">
 
-<hr>
+  <label>Payment Frequency</label>
+  <select id="paymentFrequency">
+    <option value="monthly" selected>Monthly (12 / year)</option>
+    <option value="biweekly">Bi‑Weekly (26 / year)</option>
+  </select>
 
-<label>Property Taxes</label>
-<input type="text" id="taxes" value="$3,600" inputmode="decimal" oninput="formatCurrency(this)">
-<select id="taxType">
-  <option value="year">Per Year</option>
-  <option value="month">Per Month</option>
-</select>
+  <label>Property Taxes</label>
+  <input id="taxes" type="number" value="3600">
+  <select id="taxesFreq">
+    <option value="year">Per Year</option>
+    <option value="month">Per Month</option>
+  </select>
 
-<label>Homeowners Insurance</label>
-<input type="text" id="insurance" value="$1,200" inputmode="decimal" oninput="formatCurrency(this)">
-<select id="insType">
-  <option value="year">Per Year</option>
-  <option value="month">Per Month</option>
-</select>
+  <label>Homeowners Insurance</label>
+  <input id="insurance" type="number" value="1200">
+  <select id="insuranceFreq">
+    <option value="year">Per Year</option>
+    <option value="month">Per Month</option>
+  </select>
 
-<label>PMI (Monthly $)</label>
-<input type="text" id="pmi" value="$0" inputmode="decimal" oninput="formatCurrency(this)">
+  <label>PMI (Monthly $)</label>
+  <input id="pmi" type="number" value="0">
 
-<hr>
+  <label>One‑Time Extra Principal ($)</label>
+  <input id="extraOnce" type="number" value="0">
 
-<label>One‑Time Extra Principal ($)</label>
-<input type="text" id="lump" value="$0" inputmode="decimal" oninput="formatCurrency(this)">
+  <label>Extra Monthly Principal ($)</label>
+  <input id="extraMonthly" type="number" value="0">
 
-<label>Extra Monthly Principal ($)</label>
-<input type="text" id="extraMonthly" value="$0" inputmode="decimal" oninput="formatCurrency(this)">
+  <label>Extra Bi‑Weekly Principal ($)</label>
+  <input id="extraBiWeekly" type="number" value="0">
 
-<label>Extra Bi‑Weekly Principal ($)</label>
-<input type="text" id="extraBiWeekly" value="$0" inputmode="decimal" oninput="formatCurrency(this)">
+  <button onclick="calculate()">Calculate</button>
 
-<button onclick="calculate()">Calculate</button>
-
-<div class="results" id="results"></div>
+  <div class="result" id="result"></div>
 </div>
 
 <script>
-function formatCurrency(input) {
-  let raw = input.value.replace(/[^0-9.]/g, "");
-  const parts = raw.split(".");
-  let integer = parts[0] || "0";
-  let decimal = parts[1] || "";
-  decimal = decimal.substring(0, 2);
-  integer = Number(integer).toLocaleString();
-  input.value = "$" + integer + (decimal ? "." + decimal : "");
-}
-
-function getNumber(id) {
-  return parseFloat(
-    document.getElementById(id).value.replace(/[^0-9.]/g, "")
-  ) || 0;
-}
-
 function calculate() {
-  const loan = getNumber("loan");
-  const rate = parseFloat(document.getElementById("rate").value) / 100;
-  const years = parseInt(document.getElementById("years").value);
+  const loanAmount = +loanAmountEl.value;
+  const annualRate = +interestRate.value;
+  const years = +loanTerm.value;
+  const frequency = paymentFrequency.value;
 
-  const taxes = getNumber("taxes");
-  const taxType = document.getElementById("taxType").value;
-  const insurance = getNumber("insurance");
-  const insType = document.getElementById("insType").value;
-  const pmi = getNumber("pmi");
+  const paymentsPerYear = frequency === "biweekly" ? 26 : 12;
+  const ratePerPeriod = annualRate / 100 / paymentsPerYear;
+  const totalPayments = years * paymentsPerYear;
 
-  const lump = getNumber("lump");
-  const extraMonthly = getNumber("extraMonthly");
-  const extraBiWeekly = getNumber("extraBiWeekly");
+  const basePayment =
+    loanAmount *
+    (ratePerPeriod * Math.pow(1 + ratePerPeriod, totalPayments)) /
+    (Math.pow(1 + ratePerPeriod, totalPayments) - 1);
 
-  const monthlyTaxes = taxType === "year" ? taxes / 12 : taxes;
-  const monthlyInsurance = insType === "year" ? insurance / 12 : insurance;
+  const taxesVal = +taxes.value;
+  const insuranceVal = +insurance.value;
 
-  const monthlyRate = rate / 12;
-  const biWeeklyRate = rate / 26;
-  const months = years * 12;
+  const taxesPerPeriod =
+    taxesFreq.value === "year"
+      ? taxesVal / paymentsPerYear
+      : taxesVal * (12 / paymentsPerYear);
 
-  const monthlyPI =
-    loan * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
-  const biWeeklyPI = monthlyPI / 2;
+  const insurancePerPeriod =
+    insuranceFreq.value === "year"
+      ? insuranceVal / paymentsPerYear
+      : insuranceVal * (12 / paymentsPerYear);
 
-  let balM = loan - lump;
-  let intM = 0;
-  let mCount = 0;
-  while (balM > 0 && mCount < 1000) {
-    const interest = balM * monthlyRate;
-    intM += interest;
-    balM -= (monthlyPI + extraMonthly - interest);
-    mCount++;
-  }
+  const pmiPerPeriod = +pmi.value * (12 / paymentsPerYear);
 
-  let balB = loan - lump;
-  let intB = 0;
-  let bwCount = 0;
-  while (balB > 0 && bwCount < 2000) {
-    const interest = balB * biWeeklyRate;
-    intB += interest;
-    balB -= (biWeeklyPI + extraBiWeekly - interest);
-    bwCount++;
-  }
+  const extra =
+    frequency === "biweekly"
+      ? +extraBiWeekly.value
+      : +extraMonthly.value;
 
-  const bwMonths = Math.round(bwCount / 2.17);
+  const totalPayment =
+    basePayment +
+    taxesPerPeriod +
+    insurancePerPeriod +
+    pmiPerPeriod +
+    extra;
 
-  document.getElementById("results").innerHTML = `
-    <div class="result"><strong>Total Monthly Payment (PITI):</strong> $${(monthlyPI + monthlyTaxes + monthlyInsurance + pmi).toFixed(2)}</div>
-    <hr>
-    <div class="result"><strong>Monthly Payoff:</strong> ${Math.floor(mCount / 12)} yrs ${mCount % 12} mos</div>
-    <div class="result"><strong>Total Interest (Monthly):</strong> $${intM.toFixed(2)}</div>
-    <hr>
-    <div class="result"><strong>Bi‑Weekly Payoff:</strong> ${Math.floor(bwMonths / 12)} yrs ${bwMonths % 12} mos</div>
-    <div class="result"><strong>Total Interest (Bi‑Weekly):</strong> $${intB.toFixed(2)}</div>
+  const yearlyTotal = totalPayment * paymentsPerYear;
+
+  result.innerHTML = `
+    <strong>${frequency === "biweekly" ? "Bi‑Weekly" : "Monthly"} Payment:</strong>
+    $${totalPayment.toFixed(2)}<br><br>
+    <strong>Total Per Year:</strong>
+    $${yearlyTotal.toFixed(2)}
   `;
 }
-</script>
 
-<!-- ✅ SERVICE WORKER REGISTRATION -->
-<script>
-if ("serviceWorker" in navigator) {
+const loanAmountEl = document.getElementById("loanAmount");
+
+if ("serviceWorker" in navigator && location.protocol === "https:") {
   navigator.serviceWorker.register("service-worker.js");
 }
 </script>
